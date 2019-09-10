@@ -1,25 +1,107 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Inventory</title>
-  </head>
-  <body>
-    {% if request.GET.name %}
+{% extends 'index.html' %} {% block content %}
+<!-- {% if request.GET.name %}
     <h1>Hola {{ request.GET.name }}</h1>
     {% endif %} {% if request.GET.ss %}
     <h1>Hola {{ request.GET.ss }}</h1>
     {% endif %}
-    <h1>Hoy es {{ day }}</h1>
-    {% for i in items %}
-    {{ i.name }}
-    {% endfor %}
-    <form action="/inventory/" method="POST" enctype="multipart/form-data">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <input type="submit" value="Submit" />
-    </form>
-  </body>
-</html>
+    <h1>Hoy es {{ day }}</h1> -->
+<div class="table-responsive">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        {% for header in headers %}
+        <th scope="col">
+          {% if header.filterable %}
+          <span>
+            <i class="fas fa-sort"></i>
+          </span>
+          {% endif %}
+          {{ header.title }}
+        </th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td>
+          <img
+            src="{{ item.img.url }}"
+            alt="{{ item.name }}"
+            width="50px"
+            height="50px"
+          />
+        </td>
+        <td>
+          <a
+            href="#"
+            href=""
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Editar articulo"
+            >{{ item.name }}</a
+          >
+        </td>
+        <td>
+          {{ item.sku }}
+        </td>
+        <td>
+          {{ item.location }}
+        </td>
+        <td>
+          {{ item.sell_price }}
+        </td>
+        <td>
+          {{ item.buy_price }}
+        </td>
+        <td>
+          <a
+            onclick="open_modal('{% url 'inventory:list-stock' item.pk %}')"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Ver detalles stock"
+            >{{ item.stock }}</a
+          >
+        </td>
+        <td>
+          <a
+            href=""
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Vender articulo"
+            ><i class="fas fa-cart-plus"></i
+          ></a>
+          <a
+            href=""
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Agregar stock"
+            ><i class="fab fa-dropbox"></i
+          ></a>
+          <a
+            href=""
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Generar pedido"
+            ><i class="far fa-calendar-plus"></i
+          ></a>
+          <a
+            onClick="open_modal('{% url 'inventory:delete-item' item.pk %}')"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Eliminar articulo"
+            ><i class="far fa-times-circle"></i
+          ></a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<a
+  onclick="open_modal('{% url 'inventory:create-item' %}')"
+  class="floatingButton"
+>
+  <span><i class="fas fa-plus"></i></span>
+</a>
+{% endblock %}

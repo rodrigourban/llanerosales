@@ -1,0 +1,6 @@
+¿Estas seguro que deseas borrar {{ item.name }} ?
+<form method="POST" action="{% url 'inventory:delete-item' item.pk %}">
+  {% csrf_token %}
+  <a href="{% url 'inventory:index' %}" class="btn btn-danger">Cancelar</a>
+  <button class="btn btn-primary" submit>Borrar</button>
+</form>
