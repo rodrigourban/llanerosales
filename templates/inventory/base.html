@@ -10,7 +10,7 @@
     <thead>
       <tr>
         {% for header in headers %}
-        <th scope="col">
+        <th{% if header.filterable %} class="filterable" {% endif %}  scope="col">
           {% if header.filterable %}
           <span>
             <i class="fas fa-sort"></i>
@@ -22,7 +22,7 @@
       </tr>
     </thead>
     <tbody>
-      {% for item in items %}
+      {% for item in pagination %}
       <tr>
         <td>
           <img
@@ -30,6 +30,7 @@
             alt="{{ item.name }}"
             width="50px"
             height="50px"
+            onclick="open_modal(['image','{{ item.img.url }}'])"
           />
         </td>
         <td>
@@ -56,7 +57,7 @@
         </td>
         <td>
           <a
-            onclick="open_modal('{% url 'inventory:list-stock' item.pk %}')"
+            onclick="open_modal(['Ver stock disponible','{% url 'inventory:list-stock' item.pk %}'])"
             data-toggle="tooltip"
             data-placement="top"
             title="Ver detalles stock"
@@ -65,15 +66,16 @@
         </td>
         <td>
           <a
-            href=""
+            href="{% url 'inventory:sell-item' item.pk %}"
             data-toggle="tooltip"
             data-placement="top"
             title="Vender articulo"
             ><i class="fas fa-cart-plus"></i
           ></a>
           <a
-            href=""
+            href="{% url 'inventory:create-stock' item.pk %}"
             data-toggle="tooltip"
+            target="_blank"
             data-placement="top"
             title="Agregar stock"
             ><i class="fab fa-dropbox"></i
@@ -86,7 +88,7 @@
             ><i class="far fa-calendar-plus"></i
           ></a>
           <a
-            onClick="open_modal('{% url 'inventory:delete-item' item.pk %}')"
+            onClick="open_modal(['Eliminar articulo','{% url 'inventory:delete-item' item.pk %}'])"
             data-toggle="tooltip"
             data-placement="top"
             title="Eliminar articulo"
@@ -97,11 +99,30 @@
       {% endfor %}
     </tbody>
   </table>
+  <footer class="table-footer">
+    <span class="step-links">
+      {% if pagination.has_previous %}
+      <a href="?page=1">&laquo; first</a>
+      <a href="?page={{ pagination.previous_page_number }}">previous</a>
+      {% endif %}
+
+      <span class="current">
+        Page {{ pagination.number }} of {{ pagination.paginator.num_pages }}.
+      </span>
+
+      {% if pagination.has_next %}
+      <a href="?page={{ pagination.next_page_number }}">next</a>
+      <a href="?page={{ pagination.paginator.num_pages }}">last &raquo;</a>
+      {% endif %}
+    </span>
+  </footer>
 </div>
-<a
-  onclick="open_modal('{% url 'inventory:create-item' %}')"
-  class="floatingButton"
+{% endblock %} {% block floating %}
+<button
+  onclick="open_modal(['Crear articulo','{% url 'inventory:create-item' %}'])"
+  class="floatingButton btn-dark"
 >
-  <span><i class="fas fa-plus"></i></span>
-</a>
+  <span><i class="fas fa-plus fa-2x"></i></span>
+</button>
+
 {% endblock %}

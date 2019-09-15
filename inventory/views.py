@@ -1,6 +1,7 @@
 import datetime
 import sys
-from django.core.files.uploadedfile import UploadedFile
+from django.core.paginator import Paginator
+from django.contrib import messages
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_http_methods
@@ -30,6 +31,7 @@ def article(request):
     if request.method == 'GET':
         order = request.GET.get("or")
         search = request.GET.get("ss")
+        pages = request.GET.get("pages") or 2
         headers = Item.get_fields()
         items = Item.objects.all().filter(status=True)
         items_list = []
@@ -44,13 +46,16 @@ def article(request):
                 "buy_price": el.buy_price,
                 "stock": el.count_stock()
             })
-        print(items_list)
+        paginator = Paginator(items_list, pages)
+        page = request.GET.get('page')
+        paginated = paginator.get_page(page)
         return render(
             request,
             "inventory/base.html",
             {
                 "items": items_list,
-                "headers": headers
+                "headers": headers,
+                "pagination": paginated
             }
         )
 
@@ -88,6 +93,7 @@ def create_item(request):
                 stock.save()
             except Exception as e:
                 print("Error {}".format(e))
+            messages.success(request, "Articulo agregado exitosamente!")
             return redirect('inventory:index')
         else:
             return HttpResponse(form.errors)
@@ -130,7 +136,23 @@ def create_stock(request, pk):
 
     if request.method == 'GET':
         # Get article or 404
-        return render(request, 'inventory/create_stock.html', {})
+        return render(
+                    request,
+                    'inventory/create_stock.html',
+                    {"form": StockForm(), "item": pk}
+                     )
+
+    if request.method == 'POST':
+        form = StockForm(request.POST)
+        if form.is_valid():
+            clean = form.cleaned_data
+            stock = Stock.objects.create(
+                                        item=obj,
+                                        buy_price=clean['buy_price'],
+                                        amount=clean['amount'])
+            stock.save()
+            messages.success(request, 'Se agrego stock correctamente!')
+        return redirect('inventory:index')
 
 
 @require_http_methods(['GET', 'POST'])
