@@ -69,3 +69,5 @@ class Stock(models.Model):
 
     def __str__(self):
         return ("{} - {}".format(str(self.created_at), self.item.name))
+
+

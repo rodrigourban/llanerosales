@@ -1,5 +1,6 @@
 import datetime
 import sys
+import operator
 from django.core.paginator import Paginator
 from django.contrib import messages
 from django.http import HttpResponse, Http404
@@ -29,25 +30,24 @@ from .models import Item, Stock
 @require_http_methods(['GET', 'POST'])
 def article(request):
     if request.method == 'GET':
-        order = request.GET.get("order") or 'created_at'
+        order = request.GET.get("order") or 'name'
         search = request.GET.get("search") or None
         pages = request.GET.get("pages") or 2
         headers = Item.get_fields()
-        print(order)
-        print(request.build_absolute_uri(request.path))
-        items = Item.objects.all().filter(status=True).order_by(order)
+        items = Item.objects.all().filter(status=True)
         items_list = []
         for el in items:
             items_list.append({
                 "pk": el.pk,
                 "img": el.img,
-                "name": el.name,
-                "sku": el.sku,
-                "location": el.location,
+                "name": el.name.upper(),
+                "sku": el.sku.upper(),
+                "location": el.location.upper(),
                 "sell_price": el.sell_price,
                 "buy_price": el.buy_price,
                 "stock": el.count_stock()
             })
+        items_list = sorted(items_list, key=operator.itemgetter(order))
         paginator = Paginator(items_list, pages)
         page = request.GET.get('page')
         paginated = paginator.get_page(page)
@@ -55,7 +55,6 @@ def article(request):
             request,
             "inventory/base.html",
             {
-                "items": items_list,
                 "headers": headers,
                 "pagination": paginated
             }
