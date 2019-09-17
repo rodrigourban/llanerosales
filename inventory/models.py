@@ -38,14 +38,14 @@ class Item(models.Model):
 
     def get_fields():
         return [
-            {'title': 'Imagen', 'filterable': False, 'type': 'image'},
-            {'title': 'Nombre', 'filterable': True, 'type': 'string'},
-            {'title': 'SKU', 'filterable': True, 'type': 'string'},
-            {'title': 'Ubicacion', 'filterable': False, 'type': 'string'},
-            {'title': 'Precio', 'filterable': True, 'type': 'float'},
-            {'title': 'Costo', 'filterable': True, 'type': 'float'},
-            {'title': 'Stock', 'filterable': False, 'type': 'integer'},
-            {'title': 'Acciones', 'filterable': False, 'type': 'none'},
+            {'field': "img", 'title': 'Imagen', 'filterable': False, 'type': 'image'},
+            {'field': "name", 'title': 'Nombre', 'filterable': True, 'type': 'string'},
+            {'field': "sku", 'title': 'SKU', 'filterable': True, 'type': 'string'},
+            {'field': "location", 'title': 'Ubicacion', 'filterable': False, 'type': 'string'},
+            {'field': "sell_price", 'title': 'Precio', 'filterable': True, 'type': 'float'},
+            {'field': "buy_price", 'title': 'Costo', 'filterable': True, 'type': 'float'},
+            {'field': "stock", 'title': 'Stock', 'filterable': False, 'type': 'integer'},
+            {'field': "actions", 'title': 'Acciones', 'filterable': False, 'type': 'none'},
             ]
 
     def count_stock(self):

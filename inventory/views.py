@@ -29,11 +29,13 @@ from .models import Item, Stock
 @require_http_methods(['GET', 'POST'])
 def article(request):
     if request.method == 'GET':
-        order = request.GET.get("or")
-        search = request.GET.get("ss")
+        order = request.GET.get("order") or 'created_at'
+        search = request.GET.get("search") or None
         pages = request.GET.get("pages") or 2
         headers = Item.get_fields()
-        items = Item.objects.all().filter(status=True)
+        print(order)
+        print(request.build_absolute_uri(request.path))
+        items = Item.objects.all().filter(status=True).order_by(order)
         items_list = []
         for el in items:
             items_list.append({
@@ -99,23 +101,6 @@ def create_item(request):
             return HttpResponse(form.errors)
 
 
-@require_http_methods(['GET', 'POST'])
-def sell_item(request, pk):
-    try:
-        obj = get_object_or_404(Item, pk=pk)
-    except Item.DoesNotExist:
-        raise Http404("El articulo ingresado no existe")
-
-    if request.method == 'GET':
-        return render(
-            request,
-            'inventory/sell_item.html',
-            {"item": obj, "form": sellForm()}
-            )
-    elif request.method == 'POST':
-        form = sellForm(request.POST)
-
-
 @require_http_methods(['GET'])
 def list_stock(request, pk):
     obj = get_object_or_404(Item, pk=pk)
@@ -170,4 +155,11 @@ def delete_item(request, pk):
         obj.status = False
         # should also delete stocks related
         obj.save()
+        stocks = Stock.objects.all().filter(item=obj, status=True)
+        for stock in stocks:
+            stock.status = False
+            stock.save()
+        messages.success(
+                        request,
+                        "{} se ha borrado exitosamente".format(obj.name))
         return redirect('inventory:index')
