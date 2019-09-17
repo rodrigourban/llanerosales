@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import sys
 import operator
 from django.core.paginator import Paginator
@@ -45,7 +45,8 @@ def article(request):
                 "location": el.location.upper(),
                 "sell_price": el.sell_price,
                 "buy_price": el.buy_price,
-                "stock": el.count_stock()
+                "stock": el.count_stock(),
+                "created_at": el.created_at.strftime('%d/%m/%Y')
             })
         items_list = sorted(items_list, key=operator.itemgetter(order))
         paginator = Paginator(items_list, pages)

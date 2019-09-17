@@ -44,6 +44,7 @@ class Item(models.Model):
             {'field': "location", 'title': 'Ubicacion', 'filterable': False, 'type': 'string'},
             {'field': "sell_price", 'title': 'Precio', 'filterable': True, 'type': 'float'},
             {'field': "buy_price", 'title': 'Costo', 'filterable': True, 'type': 'float'},
+            {'field': "created_at", 'title': 'Fecha', 'filterable': True, 'type': 'string'},
             {'field': "stock", 'title': 'Stock', 'filterable': False, 'type': 'integer'},
             {'field': "actions", 'title': 'Acciones', 'filterable': False, 'type': 'none'},
             ]

@@ -48,6 +48,9 @@
           {{ item.buy_price }}
         </td>
         <td>
+          {{ item.created_at }}
+        </td>
+        <td>
           <a onclick="open_modal(['Ver stock disponible','{% url 'inventory:list-stock' item.pk %}'])"
             data-toggle="tooltip" data-placement="top" title="Ver detalles stock">{{ item.stock }}</a>
         </td>
