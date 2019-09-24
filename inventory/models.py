@@ -32,10 +32,6 @@ class Item(models.Model):
         # Validate data and return bool
         pass
 
-    def sell(self):
-        # Sells and article
-        pass
-
     def get_fields():
         return [
             {'field': "img", 'title': 'Imagen', 'filterable': False, 'type': 'image'},
@@ -50,9 +46,12 @@ class Item(models.Model):
             ]
 
     def count_stock(self):
-        return reduce(
+        if Stock.objects.filter(item=self.pk, status=True).count() > 0:
+            return reduce(
                     lambda a, b: a + b,
-                    [stock.amount for stock in Stock.objects.all().filter(item=self.pk, status=True)])
+                    [stock.amount for stock in Stock.objects.filter(item=self.pk, status=True)])
+        else:
+            return 0
 
     def get_stock(self, pk):
         return [stock for stock in Stock.objects.all().filter(
@@ -65,10 +64,33 @@ class Stock(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     amount = models.IntegerField(default=0)
     buy_price = models.DecimalField(max_digits=15, decimal_places=2, default=0)
-    item = models.ForeignKey(Item, on_delete=models.CASCADE, blank=True)
+    item = models.ForeignKey(
+                            Item,
+                            on_delete=models.CASCADE,
+                            null=True,
+                            related_name="stock_item")
     status = models.BooleanField(default=1)
 
     def __str__(self):
         return ("{} - {}".format(str(self.created_at), self.item.name))
 
-
+    def sell(self, amount, sell_price):
+        remaining = 0
+        if amount >= self.amount:
+            remaining = amount - self.amount
+            sell = Sell.objects.create(
+                                        stock=self,
+                                        sell_price=sell_price,
+                                        amount=self.amount
+                                        ).save()
+            self.amount = 0
+            self.status = False
+        else:
+            sell = Sell.objects.create(
+                                        stock=self,
+                                        sell_price=sell_price,
+                                        amount=amount
+                                        ).save()
+            self.amount -= amount
+        self.save()
+        return remaining

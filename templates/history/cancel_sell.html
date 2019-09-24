@@ -1,0 +1,6 @@
+<form method="POST" action="">
+    {% csrf_token %}
+    {{form.as_p}}
+    <a href="{% url 'history:index' %}">Cancelar</a>
+    <button type="submit">Aceptar</button>
+</form>

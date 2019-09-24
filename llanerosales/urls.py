@@ -21,7 +21,10 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('inventory/', include('inventory.urls', namespace="inv")),
-] 
+    path('orders/', include('orders.urls', namespace='orders')),
+    path('history/', include('history.urls', namespace="history")),
+    # path('admin_panel/')
+]
 
 if settings.DEBUG:
     urlpatterns += static(

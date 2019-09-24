@@ -1,95 +1,91 @@
 {% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    {% block title %}
-    <title>LlaneroSales Manager</title>
-    {% endblock %}
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-      crossorigin="anonymous"
-    />
-    <link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}" />
-    <link href="{% static 'font-awesome/css/all.css' %}" rel="stylesheet" />
-    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet" />
-    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
-    <script src="{% static "js/jquery.js" %}"></script>
-    <script src="{% static "js/jquery-ui.js" %}"></script>
-  </head>
-  <body>
-    <header>
-      {% include 'navbar.html' %}
-    </header>
-    
-    <div class="container-fluid">
-      <div class="row">
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-          <div class="sidebar-sticky">
-            <ul class="nav flex-column">
-              <li class="nav-item">
-                <a class="nav-link active" href="#">
-                  <i class="fas fa-home"></i>
-                  Inventario {% if 'inventory' in request.path %} <span class="sr-only">(current)</span> {% endif %}
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <i class="fas fa-file"></i>
-                  Pedidos {% if 'orders' in request.path %} <span class="sr-only">(current)</span> {% endif %}
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <i class="fas fa-cash-register"></i>
-                  Registro {% if 'history' in request.path %} <span class="sr-only">(current)</span> {% endif %}
-                </a>
-              </li>
-              <!-- If super user -->
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <i class="fas fa-user-cog"></i>
-                  Admin {% if 'admin' in request.path %} <span class="sr-only">(current)</span> {% endif %}
-                </a>
-              </li>
-            </ul>
 
-          </div>
-        </nav>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  {% block title %}
+  <title>LlaneroSales Manager</title>
+  {% endblock %}
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+  <link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}" />
+  <link href="{% static 'font-awesome/css/all.css' %}" rel="stylesheet" />
+  <link href="{% static 'css/dashboard.css' %}" rel="stylesheet" />
+  <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+  <script src="{% static "js/jquery.js" %}"></script>
+  <script src="{% static "js/jquery-ui.js" %}"></script>
+</head>
 
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-            {% for message in messages %}
-            <div class="messages alert alert-dismissible fade show {{ message.tags }}" role="alert">
-                {{ message }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-            </div>
-            {% endfor %}
-          {% block content %}
+<body>
+  <header>
+    {% include 'navbar.html' %}
+  </header>
 
-          {% endblock %}
-        </main>
-        {% block floating %}
+  <div class="container-fluid">
+    <div class="row">
+      <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <div class="sidebar-sticky">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link {% if 'inventory' in request.path %}active{% endif %}"
+                href="{% url 'inventory:index' %}">
+                <i class="fas fa-home"></i>
+                Inventario
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if 'orders' in request.path %}active{% endif %}" href="#">
+                <i class="fas fa-file"></i>
+                Pedidos
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if 'history' in request.path %}active{% endif %}" href="{% url 'history:index' %}">
+                <i class="fas fa-cash-register"></i>
+                Registro
+              </a>
+            </li>
+            <!-- If super user -->
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <i class="fas fa-user-cog"></i>
+                Admin {% if 'admin' in request.path %} <span class="sr-only">(current)</span> {% endif %}
+              </a>
+            </li>
+          </ul>
+
+        </div>
+      </nav>
+
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+        {% for message in messages %}
+        <div class="messages alert alert-dismissible fade show {{ message.tags }}" role="alert">
+          {{ message }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        {% endfor %}
+        {% block content %}
 
         {% endblock %}
-      </div>
+      </main>
+      {% block floating %}
+
+      {% endblock %}
     </div>
-    <div class="modal" tabindex="-1" role="dialog"></div>
-    <script src="{% static "js/index.js" %}"></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-      crossorigin="anonymous"
-    ></script>
-  </body>
+  </div>
+  <div class="modal" tabindex="-1" role="dialog"></div>
+  <script src="{% static "js/index.js" %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+</body>
+
 </html>

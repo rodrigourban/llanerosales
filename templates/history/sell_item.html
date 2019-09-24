@@ -1,0 +1,7 @@
+<form method="POST" action="{% url 'history:sell-item' item.pk %}">
+    Vender {{ item.name }}
+    {% csrf_token %}
+    {{form.as_p}}
+    <a href="{% url 'inventory:index' %}">Cancelar</a>
+    <button type="submit">Crear</button>
+</form>

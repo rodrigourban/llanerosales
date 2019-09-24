@@ -1,0 +1,60 @@
+{% extends 'index.html' %}
+{% load inventory %}
+{% block content %}
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                {% for header in headers %}
+                <th scope="col">
+                    {% if header.filterable %}
+                    <a class="filterable" href="{{ request.get_full_path | get_url:header.field }}">
+                        <span>
+                            <i class="fas fa-sort"></i>
+                        </span>
+                        {{ header.title }}
+                    </a>
+                    {% else %}
+                    {{ header.title }}
+                    {% endif %}
+                </th>
+                {% endfor %}
+                <th scope="col">
+                    Actions
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in pagination %}
+            <tr>
+                <td>{{item.created_at}}</td>
+                <td>{{item.amount}}</td>
+                <td>{{item.item_name}}</td>
+                <td>{{item.buy_price}}</td>
+                <td>{{item.sell_price}}</td>
+                <td>{{item.bruto}}</td>
+                <td>{{item.neto}}</td>
+                <td><a href="{% url 'history:cancel-sell' item.pk %}">Cancelar</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <footer class="table-footer">
+        <span class="step-links">
+            {% if pagination.has_previous %}
+            <a href="{{ request.get_full_path | get_page:1}}">&laquo; first</a>
+            <a href="{{ request.get_full_path | get_page:pagination.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ pagination.number }} of {{ pagination.paginator.num_pages }}.
+            </span>
+
+            {% if pagination.has_next %}
+            <a href="{{ request.get_full_path | get_page:pagination.next_page_number }}">next</a>
+            <a href="{{ request.get_full_path | get_page:pagination.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </footer>
+</div>
+{% endblock %}

@@ -55,8 +55,8 @@
             data-toggle="tooltip" data-placement="top" title="Ver detalles stock">{{ item.stock }}</a>
         </td>
         <td>
-          <a href="" data-toggle="tooltip" data-placement="top" title="Vender articulo"><i
-              class="fas fa-cart-plus"></i></a>
+          <a href="{% url 'history:sell-item' item.pk %}" data-toggle="tooltip" data-placement="top"
+            title="Vender articulo"><i class="fas fa-cart-plus"></i></a>
           <a href="{% url 'inventory:create-stock' item.pk %}" data-toggle="tooltip" target="_blank"
             data-placement="top" title="Agregar stock"><i class="fab fa-dropbox"></i></a>
           <a href="" data-toggle="tooltip" data-placement="top" title="Generar pedido"><i

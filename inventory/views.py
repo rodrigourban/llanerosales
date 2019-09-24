@@ -34,7 +34,15 @@ def article(request):
         search = request.GET.get("search") or None
         pages = request.GET.get("pages") or 2
         headers = Item.get_fields()
-        items = Item.objects.all().filter(status=True)
+        if search:
+            items = (
+                    Item.objects.filter(name__icontains=search) |
+                    Item.objects.filter(sku__icontains=search) |
+                    Item.objects.filter(location__icontains=search) |
+                    Item.objects.filter(created_at__icontains=search)
+                    )
+        else:
+            items = Item.objects.all().filter(status=True)
         items_list = []
         for el in items:
             items_list.append({
