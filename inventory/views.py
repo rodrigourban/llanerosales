@@ -9,22 +9,19 @@ from django.views.decorators.http import require_http_methods
 from .forms import ItemForm, StockForm
 from .models import Item, Stock
 
-# delete element with confirmation
-# update element with previous fields when click article name
-# table header on click queryparam sort=table.header.name
-# input search queryparam ss
-#   add settimeout through javascript but later
-# table footer with paginator, stock being shown / stock total
-# add stock
-# sell item
-# Sort if order has been given
-# Filter if search has been given
-# add pagination, store in cookies default
-# show stock list when clicked on table cell "stock"
-# show enlarged image in modal when onClick
+# If pk given, populate create-item template with current values
+# -so you can change any and update
+# table header on click queryparam sort=table.header.name mode
+# -if "title" is clicked change to "-clicked" (ASC-DESC)
+# search input appends to current queryparam
+# -add settimeout, 2s, through javascript
+# add page size to table footer
+# table footer stock being shown / stock total
 
-# add users, roles, employee, manager, admin.
-# add login
+# fix "profile pic" to be logout
+# add hamburguer menu when collapsed
+# STYLE
+
 
 
 @require_http_methods(['GET', 'POST'])
