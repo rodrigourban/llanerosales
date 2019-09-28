@@ -4,7 +4,8 @@ from .views import (
     create_user,
     delete_user,
 )
-app_name = 'admin_panel'
+app_name = 'admin-panel'
+
 urlpatterns = [
     path('', admin_panel, name="index"),
     path('create/', create_user, name="create-user"),

@@ -1,0 +1,52 @@
+{% extends "index.html" %}
+{% block content %}
+<div class="table-title">
+    <div class="row">
+        <div class="col-sm-5">
+            <h2>Gestor de <b>Usuarios</b></h2>
+        </div>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Usuario</th>
+                <th>Fecha de Creacion</th>
+                <th>Rol</th>
+                <th>Email</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>1</td>
+                <td>{{user.username}}</td>
+                <td>{{user.date_joined}}</td>
+                <td>
+                    {% if user.is_staff %}
+                    Admin
+                    {% else %}
+                    Vendedor
+                    {% endif %}
+                </td>
+                <td><span class="status text-success">&bull;</span> Active</td>
+                <td>
+                    {% if not user.is_staff %}
+                    <a href="{% url 'admin-panel:delete-user' user.pk %}" class="delete" title="Delete"
+                        data-toggle="tooltip"><i class="fa fa-times" aria-hidden="true"></i></a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+{% block floating %}
+<a href="{% url 'admin-panel:create-user' %}" class="floatingButton btn-dark">
+    <span><i class="fas fa-plus fa-2x"></i></span>
+</a>
+{% endblock %}

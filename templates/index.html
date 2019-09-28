@@ -33,24 +33,24 @@
               <a class="nav-link {% if 'inventory' in request.path %}active{% endif %}"
                 href="{% url 'inventory:index' %}">
                 <i class="fas fa-home"></i>
-                Inventario
+                Inventario {% if 'admin' in request.path %} <span class="sr-only">(current)</span> {% endif %}
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link {% if 'orders' in request.path %}active{% endif %}" href="#">
+              <a class="nav-link {% if 'orders' in request.path %}active{% endif %}" href="{% url 'orders:index' %}">
                 <i class="fas fa-file"></i>
-                Pedidos
+                Pedidos {% if 'admin' in request.path %} <span class="sr-only">(current)</span> {% endif %}
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link {% if 'history' in request.path %}active{% endif %}" href="{% url 'history:index' %}">
                 <i class="fas fa-cash-register"></i>
-                Registro
+                Registro {% if 'admin' in request.path %} <span class="sr-only">(current)</span> {% endif %}
               </a>
             </li>
             <!-- If super user -->
             <li class="nav-item">
-              <a class="nav-link" href="#">
+              <a class="nav-link {% if 'admin' in reques.path %}active{% endif %}" href="{% url 'admin-panel:index' %}">
                 <i class="fas fa-user-cog"></i>
                 Admin {% if 'admin' in request.path %} <span class="sr-only">(current)</span> {% endif %}
               </a>

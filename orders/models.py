@@ -1,5 +1,8 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 from inventory.models import Item
+
+User = get_user_model()
 
 
 class OrderList(models.Model):
@@ -7,6 +10,12 @@ class OrderList(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     edited_at = models.DateField(auto_now_add=True)
+    created_by = models.ForeignKey(
+        User,
+        null=True,
+        related_name="order_user",
+        on_delete=models.SET_NULL
+        )
 
     def __str__(self):
         return (f"Pedido {self.title}")

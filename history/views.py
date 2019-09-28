@@ -69,7 +69,7 @@ def sell_item(request, pk):
             sell_price = form.cleaned_data['amount']
             if obj.count_stock() >= amount:
                 for stock in stock_list:
-                    amount = stock.sell(amount, sell_price)
+                    amount = stock.sell(amount, sell_price, user=request.user)
                     if not amount:
                         break
             else:

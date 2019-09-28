@@ -14,19 +14,23 @@ User = get_user_model()
 # admin panel with user managment.
 # -admin panel get ganancias, with charts
 
+
 @require_http_methods(['GET'])
 def admin_panel(request):
+    user_list = User.objects.filter(is_active=True)
     return render(
         request,
-        'admin/index.html'
+        'admin-panel/index.html',
+        {'users': user_list}
     )
+
 
 @require_http_methods(['GET', 'POST'])
 def create_user(request):
     if request.method == 'GET':
         return render(
             request,
-            'admin/create_user.html',
+            'admin-panel/create_user.html',
             {'form': UserCreationForm}
         )
     elif request.method == 'POST':
@@ -41,33 +45,30 @@ def create_user(request):
         else:
             messages.error(
                 request,
-                "Por favor ingresa informacion valida"
+                form.errors
             )
             return redirect('admin-panel:create-user')
         return redirect('admin-panel:index')
 
 
-@require_http_methods(['GET', 'DELETE'])
+@require_http_methods(['GET', 'POST'])
 def delete_user(request, pk):
     user = get_object_or_404(User, pk=pk)
 
     if request.method == 'GET':
         return render(
             request,
-            'admin-panel:delete-user',
+            'admin-panel/delete_user.html',
             {'object': user}
         )
-    elif request.method == 'DELETE':
+    elif request.method == 'POST':
         user.is_active = False
         user.save()
         messages.success(
             request,
             "Se borro el usuario correctamente"
         )
-        return render(
-            request,
-            'admin:index'
-        )
+        return redirect('admin-panel:index')
 
 
 @require_http_methods(['POST'])

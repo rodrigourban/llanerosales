@@ -1,6 +1,6 @@
 {% extends "index.html" %}
 {% block content %}
-<form method="post" action="{% url 'admin-panel:delete-user' object.pk %}">
+<form method="POST" action="{% url 'admin-panel:delete-user' object.pk %}">
     {% csrf_token %}
     <h1>¿Estas seguro que deseas borrar el usuario {{object.username}}? </h1>
     <input class="btn btn-primary" type="submit" value="Aceptar">

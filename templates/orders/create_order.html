@@ -1,0 +1,57 @@
+{% extends 'index.html' %}
+{% block content %}
+<form method="POST" class="form">
+    {% csrf_token %}
+    <h6>Crear lista de pedidos</h6>
+    <div class="form-group">
+        <label>Titulo</label>
+        {{ orderlistform.title }}
+        {% if orderlistform.title.errors %}
+        {% for error in orderlistfrom.title.errors %}
+        {{ error|escape }}
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div class="form-group">
+        <label>Descripcion</label>
+        {{ orderlistform.description }}
+        {% if orderlistform.description.errors %}
+        {% for error in orderlistfrom.description.errors %}
+        {{ error|escape }}
+        {% endfor %}
+        {% endif %}
+    </div>
+    <br>
+    {{ orderform.managment_form }}
+    <h6>Listado de articulos</h6>
+    {% for order in orderform %}
+    <div class="order-formset form-inline">
+        <label class="sr-only">Articulo</label>
+        {{ order.item }}
+        {% if order.item.errors %}
+        {% for error in order.item.errors %}
+        {{ error|escape }}
+        {% endfor %}
+        {% endif %}
+        <label class="sr-only">Cantidad</label>
+        {{ order.amount }}
+        {% if order.amount.errors %}
+        {% for error in order.amount.errors %}
+        {{ error|escape }}
+        {% endfor %}
+        {% endif %}
+    </div>
+    {% endfor %}
+    <button type="submit">Crear</button>
+</form>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.formset/1.2.2/jquery.formset.js"></script>
+<script>
+    $('.order-formset').formset({
+        addText: 'Agregar articulo',
+        deleteText: 'Borrar',
+    })
+</script>
+
+{% endblock %}

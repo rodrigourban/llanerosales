@@ -77,7 +77,7 @@ def create_item(request):
     if request.method == 'GET':
         return render(
                     request,
-                    'inventory/create_item.html', 
+                    'inventory/create_item.html',
                     {"form": ItemForm()}
                     )
     elif request.method == 'POST':
@@ -86,7 +86,7 @@ def create_item(request):
         if form.is_valid():
             try:
                 cleaned = form.cleaned_data
-                item = Item.objects.create()
+                item = Item.objects.create(created_by=request.user)
                 item.name = cleaned['name']
                 item.sku = cleaned['sku']
                 item.location = cleaned['location']
@@ -94,7 +94,10 @@ def create_item(request):
                 item.buy_price = cleaned['buy_price']
                 item.img = cleaned['img']
                 item.save()
-                stock = Stock.objects.create(item=item)
+                stock = Stock.objects.create(
+                    item=item,
+                    created_by=request.user
+                )
                 stock.buy_price = cleaned['buy_price']
                 stock.amount = cleaned['initial_stock']
                 stock.save()
@@ -137,9 +140,11 @@ def create_stock(request, pk):
         if form.is_valid():
             clean = form.cleaned_data
             stock = Stock.objects.create(
-                                        item=obj,
-                                        buy_price=clean['buy_price'],
-                                        amount=clean['amount'])
+                created_by=request.user,
+                item=obj,
+                buy_price=clean['buy_price'],
+                amount=clean['amount']
+            )
             stock.save()
             messages.success(request, 'Se agrego stock correctamente!')
         return redirect('inventory:index')

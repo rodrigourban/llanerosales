@@ -19,6 +19,7 @@ class ItemForm(ModelForm):
 
 
 class StockForm(ModelForm):
+
     class Meta:
         model = Stock
         fields = [

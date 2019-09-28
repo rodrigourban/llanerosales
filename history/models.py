@@ -1,5 +1,8 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 from inventory.models import Stock
+
+User = get_user_model()
 
 
 class Sell(models.Model):
@@ -17,6 +20,12 @@ class Sell(models.Model):
                             related_name="sell_stock",
                             )
     status = models.BooleanField(default=True)
+    created_by = models.ForeignKey(
+        User,
+        null=True,
+        related_name="sell_user",
+        on_delete=models.SET_NULL
+    )
 
     def __str__(self):
         return "{} {}".format(created_at, stock.name)
